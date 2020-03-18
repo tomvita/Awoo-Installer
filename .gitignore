@@ -1,0 +1,11 @@
+.vscode
+build
+*.d
+*.o
+
+*.elf
+*.nacp
+*.nro
+
+*.nso
+*.nsp
