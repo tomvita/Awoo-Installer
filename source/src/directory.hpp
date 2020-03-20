@@ -18,6 +18,7 @@ class Directory {
         : m_fs(fs), m_path(std::string(path)) {}
 
     Result Open();
+    void Close();
     Result GetEntries(std::vector<FileEntry> *entries);
 
     /* Open an entry for read. */

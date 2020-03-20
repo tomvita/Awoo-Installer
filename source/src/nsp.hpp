@@ -1,6 +1,7 @@
 #pragma once
 #include "../hos/hos.hpp"
 #include "../util/awoo_result.hpp"
+#include "../common.hpp"
 
 #include <utility>
 #include <vector>
@@ -20,6 +21,10 @@ class NSP {
     Result Open() {
         /* File was opened prior to initialization. */
         return ResultSuccess();
+    }
+
+    void Close() {
+        /* File is provided extern. */
     }
 
     Result GetEntries(std::vector<FileEntry> *entries) {

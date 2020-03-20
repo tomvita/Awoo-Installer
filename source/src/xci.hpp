@@ -25,6 +25,10 @@ class XCI {
         return ResultSuccess();
     }
 
+    void Close() {
+        /* File is provided extern. */
+    }
+
     Result GetEntries(std::vector<FileEntry> *entries) {
         /* Clear entries. */
         entries->clear();
@@ -98,7 +102,7 @@ class XCI {
             auto &entry = hfs0_entries[i];
             entries->push_back({
                 .name = stringTable.GetName(entry),
-                .offset = entry.dataOffset + partitionOffset,
+                .offset = partitionOffset + secureHeaderSize + entry.dataOffset,
                 .size = entry.fileSize,
             });
         }

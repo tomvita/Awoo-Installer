@@ -29,6 +29,11 @@ Result Gamecard::Open() {
     return ResultSuccess();
 }
 
+void Gamecard::Close() {
+    this->m_file->ForceClose();
+    this->m_fs->ForceClose();
+}
+
 Result Gamecard::GetEntries(std::vector<FileEntry> *entries) {
     /* Clear entries. */
     entries->clear();

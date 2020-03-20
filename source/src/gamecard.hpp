@@ -15,9 +15,10 @@ class Gamecard {
     Gamecard();
 
     Result Open();
+    void Close();
     Result GetEntries(std::vector<FileEntry> *entries);
 
     Result OpenEntry(const FileEntry &entry);
-    Result Read(u64 *bytes_read, u8 *buffer, s64 offset, u64 read_size);
     void CloseEntry();
+    Result Read(u64 *bytes_read, u8 *buffer, s64 offset, u64 read_size);
 };

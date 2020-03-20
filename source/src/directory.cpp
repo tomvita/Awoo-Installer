@@ -6,6 +6,12 @@ Result Directory::Open() {
     return m_fs->OpenDirectoryFormat(&m_dir, FsDirOpenMode_ReadFiles, m_path.c_str());
 }
 
+void Directory::Close() {
+    /* Filesystem is externally provided. */
+    this->m_dir->ForceClose();
+    this->m_file->ForceClose();
+}
+
 Result Directory::GetEntries(std::vector<FileEntry> *entries) {
     /* Clear entries. */
     entries->clear();
