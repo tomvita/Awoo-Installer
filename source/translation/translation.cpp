@@ -61,3 +61,12 @@ namespace Translation {
         current = translations[lang];
     }
 }
+
+void DebugPrintAllStrings() {
+    for (u32 i = 0; i < Translation::Total_Languages; i++) {
+        Translation::SetLanguage(Translation::Language(i));
+        for (u32 j = 0; j < Total_Strings; j++) {
+            std::printf("%s\n", &String(j));
+        }
+    }
+}

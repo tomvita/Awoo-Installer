@@ -50,3 +50,5 @@ namespace Translation {
 inline const char *operator&(String key) {
     return Translation::Translate(key);
 }
+
+void DebugPrintAllStrings();

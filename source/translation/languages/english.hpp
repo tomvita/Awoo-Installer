@@ -6,5 +6,5 @@ constexpr static const char *const english[Total_Strings] = {
     [BACK] = "Back",
     [FINISHED] = "Finished",
     [EXIT] = "Exit",
-    [Invalid_PFS0] = "Invalid PFS0 Magic",
+    [Invalid_PFS0] = "Invalid PFS0 Magic!",
 };
