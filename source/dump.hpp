@@ -63,37 +63,3 @@ Result doubleDump(Destination &dst, Source &src) {
 
     return ResultSuccess();
 }
-
-template <typename Destination, typename Source, typename Intermediate>
-Result dump(Destination &dst, Source &src) {
-    /* Try to open Source. */
-    R_TRY(src.Open());
-    ScopeGuard src_close([&] { src.Close(); });
-
-    /* Allocate temporary buffer and delete on return. */
-    u8 *buffer = new u8[DUMP_BUFFER_SIZE];
-    ScopeGuard buffer_guard([&] { delete[] buffer; });
-
-    /* Receive entries. */
-    std::vector<FileEntry> entries;
-    R_TRY(src.GetEntries(&entries));
-
-    /* Iterate over found entries. */
-    for (const FileEntry &entry : entries) {
-        /* Open file for read. */
-        R_TRY(src.OpenEntry(entry));
-
-        /* Allocate new entry for write. */
-        std::unique_ptr<Intermediate> fileDst;
-        R_TRY(dst.Allocate(&fileDst, entry));
-
-        /* Read and write entry. */
-        u64 readSize;
-        for (u64 offset = 0; offset < entry.size; offset += readSize) {
-            R_TRY(src.Read(&readSize, buffer, offset, DUMP_BUFFER_SIZE));
-            R_TRY(fileDst->Write(buffer, offset, readSize));
-        }
-        src.CloseEntry();
-    }
-    return ResultSuccess();
-}
