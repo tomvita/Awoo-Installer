@@ -39,9 +39,9 @@ include $(DEVKITPRO)/libnx/switch_rules
 #---------------------------------------------------------------------------------
 TARGET		:=	$(notdir $(CURDIR))
 BUILD		:=	build
-SOURCES		:=	source source/hos/fs source/hos/ncm source/protocol source/dst source/src source/translation source/util
+SOURCES		:=	source source/hos/fs source/hos/ncm source/protocol source/dst source/src source/translation source/util source/util/smc source/util/tx
 DATA		:=	data
-INCLUDES	:=	include include/hos/fs include/hos/ncm include/hos/types include/protocol include/dst include/dst include/translation include/util
+INCLUDES	:=	include include/hos/fs include/hos/ncm include/hos/types include/protocol include/dst include/dst include/translation include/util include/util/smc
 #ROMFS	:=	romfs
 APP_AUTHOR	:=	Behemoth
 
@@ -53,7 +53,7 @@ ARCH	:=	-march=armv8-a+crc+crypto -mtune=cortex-a57 -mtp=soft -fPIE
 CFLAGS	:=	-g -Wall -O2 -ffunction-sections \
 			$(ARCH) $(DEFINES)
 
-CFLAGS	+=	$(INCLUDE) -D__SWITCH__ -DDEBUG -DDEBUG_NXLINK -DDEBUG_LOG_TO_FILE 
+CFLAGS	+=	$(INCLUDE) -D__SWITCH__ -DDEBUG -DDEBUG_NXLINK #-DDEBUG_LOG_TO_FILE
 
 CXXFLAGS	:= $(CFLAGS) -fno-rtti -std=gnu++17 -Wall -Werror -fno-exceptions
 

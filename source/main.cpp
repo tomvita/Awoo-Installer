@@ -8,7 +8,10 @@
 #include "src/nsp.hpp"
 #include "src/xci.hpp"
 #include "translation/translation.hpp"
+#include "util/config.hpp"
 #include "util/logger.hpp"
+#include "util/emunand.hpp"
+#include "util/cfw.hpp"
 
 #include <chrono>
 #include <switch.h>
@@ -44,6 +47,7 @@ void __appInit() {
     R_ASSERT(appletInitialize());
     R_ASSERT(timeInitialize());
     R_ASSERT(fsInitialize());
+    R_ASSERT(splCryptoInitialize());
 
     R_ASSERT(socketInitializeDefault());
 }
@@ -51,6 +55,7 @@ void __appInit() {
 void __appExit() {
     socketExit();
 
+    splCryptoExit();
     fsExit();
     timeExit();
     appletExit();
@@ -78,33 +83,9 @@ Result Test(std::shared_ptr<IFileSystem> &fs) {
         R_TRY((doubleDump<SdDump, NSP<IFile>, IFile>(sd_dump, nsp)));
     }
     {
-        Gamecard gc;
-        SdDump sd_dump(fs, "/tti-dump");
-
-        auto startTime = std::chrono::steady_clock::now();
-
-        //R_TRY((doubleDump<SdDump, Gamecard, IFile>(sd_dump, gc)));
-
-        auto endTime = std::chrono::steady_clock::now();
-        auto duration = std::chrono::duration<double>(endTime - startTime);
-        LOG("took %f seconds\n", duration.count());
-    }
-    {
-        FsFileSystem sys_fs;
-        SdDump sd_dump(fs, "/tti-dump");
-
-        R_TRY(fsOpenBisFileSystem(&sys_fs, FsBisPartitionId_System, "/"));
-        auto sys = std::make_shared<IFileSystem>(std::move(sys_fs));
-
-        IDirectory dir;
-        sys->OpenDirectoryFormat(&dir, FsDirOpenMode_ReadFiles, "/save");
-        for (auto &entry : DirectoryIterator(&dir)) {
-            puts(entry.name);
-        }
-
-        //Install<Directory> dir_install(sys, "/save");
-        //R_TRY(dir_install.Verify());
-        //R_TRY(dir_install.Start());
+        Install<Gamecard> install(NcmStorageId_SdCard);
+        R_TRY(install.Verify());
+        R_TRY(install.Start());
     }
     {
         IFile file;
@@ -123,10 +104,12 @@ int main(int argc, char *argv[]) {
     auto fs = std::make_shared<IFileSystem>(std::move(sdmc));
 
     InitializeLog(fs);
+    
+    Crypto::Initialize();
 
     LOG(&OK);
 
-    R_LOG(Test(fs));
+    //R_LOG(Test(fs));
 
     LOG(&EXIT);
 

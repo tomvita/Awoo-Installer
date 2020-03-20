@@ -1,8 +1,8 @@
 #pragma once
+#include "common.hpp"
 #include "hos/hos.hpp"
 #include "util/double_buffer.hpp"
 #include "util/logger.hpp"
-#include "common.hpp"
 
 #include <vector>
 
@@ -10,6 +10,7 @@ template <typename Destination, typename Source, typename Intermediate>
 Result doubleDump(Destination &dst, Source &src) {
     /* Try to open Source. */
     R_TRY(src.Open());
+    ScopeGuard src_close([&] { src.Close(); });
 
     /* Receive entries. */
     std::vector<FileEntry> entries;
@@ -18,7 +19,7 @@ Result doubleDump(Destination &dst, Source &src) {
     /* Iterate over found entries. */
     for (const FileEntry &entry : entries) {
         /* Open file for read. */
-        LOG("\nopening entry: %s", entry.name.c_str());
+        LOG("opening entry: %s", entry.name.c_str());
         R_TRY(src.OpenEntry(entry));
 
         /* Allocate new entry for write. */
@@ -67,6 +68,7 @@ template <typename Destination, typename Source, typename Intermediate>
 Result dump(Destination &dst, Source &src) {
     /* Try to open Source. */
     R_TRY(src.Open());
+    ScopeGuard src_close([&] { src.Close(); });
 
     /* Allocate temporary buffer and delete on return. */
     u8 *buffer = new u8[DUMP_BUFFER_SIZE];
