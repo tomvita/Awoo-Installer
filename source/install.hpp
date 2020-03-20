@@ -61,9 +61,7 @@ class Install {
                 
                 /* Verify header. */
                 LOG("Verifying header.");
-                R_UNLESS(header.magic == MAGIC_NCA3, ResultInvalidNCAMagic());
-                const u8 *modulus = Crypto::GetRsa2048Modulus(header.fixedKeyGeneration);
-                R_UNLESS(Crypto::VerifyRsa2048Pss(&header.magic, 0x200, header.fixedKeySignature, modulus), ResultInvalidNCAHeaderFixedKeySignature());
+                R_TRY(Crypto::VerifyNcaHeader(&header));
             }
             LOG("entry: %s", entry.name.c_str());
         }

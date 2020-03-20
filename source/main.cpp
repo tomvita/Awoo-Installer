@@ -109,7 +109,7 @@ int main(int argc, char *argv[]) {
 
     LOG(&OK);
 
-    //R_LOG(Test(fs));
+    R_LOG(Test(fs));
 
     LOG(&EXIT);
 

@@ -12,6 +12,7 @@ MAKE_OWN_RC(NxlinkInitFailed, 4)
 MAKE_OWN_RC(LogNotInitialized, 5)
 MAKE_OWN_RC(EndOfFile, 20)
 MAKE_OWN_RC(PartitionNotFound, 21)
+MAKE_OWN_RC(UnknownFixedKeySignature, 30)
 
 /* FS */
 MAKE_RC(GamecardNotInserted, 2, 2520)

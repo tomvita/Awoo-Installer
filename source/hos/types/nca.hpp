@@ -159,5 +159,4 @@ struct NcaHeader {
     u8 encryptedKeyArea[0x10][4];
     u8 pad[0xc0];
 };
-//static_assert(sizeof(NcaHeader) == 0x340);
 static_assert(sizeof(NcaHeader) == 0x400);
