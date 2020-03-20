@@ -7,14 +7,19 @@
 namespace {
 
 #ifdef DEBUG
+    bool initialized;
+
+#ifdef DEBUG_NXLINK
+    int nxlinkSocket;
+#endif /* DEBUG_NXLINK */
+
+#ifdef DEBUG_LOG_TO_FILE
     constexpr static inline const char *const log_path = "/log.txt";
     std::shared_ptr<IFileSystem> sdmc;
     s64 offset;
-    int nxlinkSocket;
-    bool initialized;
     constexpr size_t buf_size = 1024;
     char sprint_buf[buf_size];
-    
+
     __attribute__((format(printf, 2, 3)))
     Result
     fprintf(IFile *file, const char *fmt, ...) {
@@ -29,6 +34,7 @@ namespace {
         offset += n;
         return ResultSuccess();
     }
+#endif /* DEBUG_LOG_TO_FILE */
 #endif /* DEBUG*/
 
 }

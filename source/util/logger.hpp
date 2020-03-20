@@ -8,7 +8,7 @@ void ExitLog();
 Result Log(const char *path, int line, const char *function, const char *format, ...) __attribute__((format(printf, 4, 5)));
 
 #ifdef DEBUG
-#define LOG(format, ...) Log(__FILE__, __LINE__, __PRETTY_FUNCTION__, format, ##__VA_ARGS__);
+#define LOG(format, ...) Log(__FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__);
 #define DEBUG_RUN(snippet) snippet
 #else
 #define LOG(format, ...)
