@@ -15,6 +15,12 @@ MAKE_RC(Success, 0, 0)
             return temp_res;              \
     })
 
+#define R_RETURN(res_expr)        \
+    ({                            \
+        if (R_FAILED((res_expr))) \
+            return;               \
+    })
+
 #define R_ASSERT(res_expr)                \
     ({                                    \
         const auto temp_res = (res_expr); \
