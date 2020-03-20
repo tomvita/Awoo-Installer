@@ -8,13 +8,8 @@
 #include "src/nsp.hpp"
 #include "src/xci.hpp"
 #include "translation/translation.hpp"
-#include "util/config.hpp"
 #include "util/logger.hpp"
-#include "util/emunand.hpp"
-#include "util/cfw.hpp"
 
-#include <chrono>
-#include <switch.h>
 #include <unistd.h>
 
 extern "C" {
@@ -104,7 +99,7 @@ int main(int argc, char *argv[]) {
     auto fs = std::make_shared<IFileSystem>(std::move(sdmc));
 
     InitializeLog(fs);
-    
+
     Crypto::Initialize();
 
     LOG(&OK);

@@ -33,36 +33,34 @@ class Install {
 
         /* Iterate over found entries. */
         for (const FileEntry &entry : entries) {
-            if (entry.name.substr(entry.name.size() - 4) == ".nca") {
-                LOG("NCA: %s detected.", entry.name.c_str());
+            /* Ignore non-NCA's. */
+            if (entry.name.substr(entry.name.size() - 4) != ".nca")
+                continue;
 
-                /* Open entry. */
-                LOG("Opening entry.");
-                R_TRY(m_archive.OpenEntry(entry));
+            LOG("NCA: %s detected.", entry.name.c_str());
 
-                /* Read header. */
-                LOG("Reading header.");
-                u64 read_size;
-                NcaHeader header;
-                R_TRY(m_archive.Read(&read_size, (u8*)&header, 0, sizeof(NcaHeader)));
-                R_UNLESS(read_size == sizeof(NcaHeader), ResultEndOfFile());
+            /* Open entry. */
+            LOG("Opening entry.");
+            R_TRY(m_archive.OpenEntry(entry));
 
-                /* Decrypt header. */
-                LOG("Decrypting header.");
-                auto decryptor = Crypto::GetHeaderDecryptor();
-                decryptor.Decrypt(&header, &header, sizeof(NcaHeader), 0, 0x200);
+            /* Read header. */
+            LOG("Reading header.");
+            u64 read_size;
+            NcaHeader header;
+            R_TRY(m_archive.Read(&read_size, (u8*)&header, 0, sizeof(NcaHeader)));
+            R_UNLESS(read_size == sizeof(NcaHeader), ResultEndOfFile());
 
-                DEBUG_RUN({
-                    for (u32 i = 0; i < 0x10; i++)
-                        std::printf("%02X ", ((u8*)&header.magic)[i]);
-                    std::printf("\n");
-                    LOG("header magic: 0x%x", header.magic);
-                })
-                
-                /* Verify header. */
-                LOG("Verifying header.");
-                R_TRY(Crypto::VerifyNcaHeader(&header));
-            }
+            /* Decrypt header. */
+            LOG("Decrypting header.");
+            auto decryptor = Crypto::GetHeaderDecryptor();
+            decryptor.Decrypt(&header, &header, sizeof(NcaHeader), 0, 0x200);
+
+            PRINT_BYTES(&header.magic, 0x10);
+
+            /* Verify header. */
+            LOG("Verifying header.");
+            R_TRY(Crypto::VerifyNcaHeader(&header));
+
             LOG("entry: %s", entry.name.c_str());
         }
 
