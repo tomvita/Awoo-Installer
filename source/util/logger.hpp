@@ -6,13 +6,18 @@ void ExitLog();
 
 /* Not using variadic templates here because attribute format don't work for it (yet). */
 Result Log(const char *path, int line, const char *function, const char *format, ...) __attribute__((format(printf, 4, 5)));
+void PrintBytes(const u8 *bytes, size_t size);
 
 #ifdef DEBUG
 #define LOG(format, ...) Log(__FILE__, __LINE__, __FUNCTION__, format, ##__VA_ARGS__);
 #define DEBUG_RUN(snippet) snippet
+#define PRINT_BYTES(bytes, size) \
+    LOG("Printing bytes:");      \
+    PrintBytes((const u8 *)bytes, size)
 #else
 #define LOG(format, ...)
 #define DEBUG_RUN(snippet)
+#define PRINT_BYTES(bytes, size)
 #endif
 
 /// Evaluates an expression that returns a result, and returns and logs the result if it would fail.
