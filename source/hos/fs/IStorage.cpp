@@ -1,5 +1,7 @@
 #include "IStorage.hpp"
 
+#include "../util/result.hpp"
+
 #include <utility>
 
 IStorage::IStorage()
@@ -63,4 +65,15 @@ Result IStorage::GetSize(s64 *out) {
 
 Result IStorage::OperateRange(FsOperationId operation_id, s64 offset, s64 length, FsRangeInfo *out) {
     return fsStorageOperateRange(&this->m_storage, operation_id, offset, length, out);
+}
+
+namespace fs {
+
+    Result OpenBisStorage(IStorage *out, FsBisPartitionId partitionId) {
+        FsStorage storage;
+        R_TRY(fsOpenBisStorage(&storage, partitionId));
+        *out = IStorage(std::move(storage));
+        return ResultSuccess();
+    }
+
 }

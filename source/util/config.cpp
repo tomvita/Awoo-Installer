@@ -20,13 +20,12 @@ namespace cfg {
                 return;
 
             /* Open boot storage. */
-            FsStorage boot0;
-            R_RETURN(fsOpenBisStorage(&boot0, FsBisPartitionId_BootPartition1Root));
-            IStorage storage(std::move(boot0));
+            IStorage boot0;
+            R_RETURN(fs::OpenBisStorage(&boot0, FsBisPartitionId_BootPartition1Root));
 
             /* Read version from BCT. */
             u32 temp_keyGen;
-            R_RETURN(storage.Read(0x2330, &temp_keyGen, sizeof(u32)));
+            R_RETURN(boot0.Read(0x2330, &temp_keyGen, sizeof(u32)));
 
             /* Save key gen and set cache flag. */
             keyGen = temp_keyGen;

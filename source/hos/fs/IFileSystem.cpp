@@ -1,5 +1,7 @@
 #include "IFileSystem.hpp"
 
+#include "../util/result.hpp"
+
 #include <utility>
 
 IFileSystem::IFileSystem()
@@ -75,34 +77,30 @@ Result IFileSystem::GetEntryType(FsDirEntryType *out, const char *path) {
 
 Result IFileSystem::OpenFile(std::unique_ptr<IFile> *out, u32 mode, const char *path) {
     FsFile fsFile;
-    Result rc = fsFsOpenFile(&this->m_fs, path, mode, &fsFile);
-    if (R_SUCCEEDED(rc))
-        *out = std::make_unique<IFile>(std::move(fsFile));
-    return rc;
+    R_TRY(fsFsOpenFile(&this->m_fs, path, mode, &fsFile));
+    *out = std::make_unique<IFile>(std::move(fsFile));
+    return ResultSuccess();
 }
 
 Result IFileSystem::OpenFile(IFile *out, u32 mode, const char *path) {
     FsFile fsFile;
-    Result rc = fsFsOpenFile(&this->m_fs, path, mode, &fsFile);
-    if (R_SUCCEEDED(rc))
-        *out = IFile(std::move(fsFile));
-    return rc;
+    R_TRY(fsFsOpenFile(&this->m_fs, path, mode, &fsFile));
+    *out = IFile(std::move(fsFile));
+    return ResultSuccess();
 }
 
 Result IFileSystem::OpenDirectory(std::unique_ptr<IDirectory> *out, u32 mode, const char *path) {
     FsDir fsDir;
-    Result rc = fsFsOpenDirectory(&this->m_fs, path, mode, &fsDir);
-    if (R_SUCCEEDED(rc))
-        *out = std::make_unique<IDirectory>(std::move(fsDir));
-    return rc;
+    R_TRY(fsFsOpenDirectory(&this->m_fs, path, mode, &fsDir));
+    *out = std::make_unique<IDirectory>(std::move(fsDir));
+    return ResultSuccess();
 }
 
 Result IFileSystem::OpenDirectory(IDirectory *out, u32 mode, const char *path) {
     FsDir fsDir;
-    Result rc = fsFsOpenDirectory(&this->m_fs, path, mode, &fsDir);
-    if (R_SUCCEEDED(rc) && out)
-        *out = IDirectory(std::move(fsDir));
-    return rc;
+    R_TRY(fsFsOpenDirectory(&this->m_fs, path, mode, &fsDir));
+    *out = IDirectory(std::move(fsDir));
+    return ResultSuccess();
 }
 
 Result IFileSystem::Commit() {
@@ -125,67 +123,59 @@ namespace fs {
 
     Result OpenFileSystem(IFileSystem* out, FsFileSystemType fsType, const char* contentPath) {
         FsFileSystem fs;
-        Result rc = fsOpenFileSystem(&fs, fsType, contentPath);
-        if (R_SUCCEEDED(rc))
-            *out = IFileSystem(std::move(fs));
-        return rc;
+        R_TRY(fsOpenFileSystem(&fs, fsType, contentPath));
+        *out = IFileSystem(std::move(fs));
+        return ResultSuccess();
     }
 
     Result OpenFileSystemWithPatch(IFileSystem* out, u64 id, FsFileSystemType fsType) {
         FsFileSystem fs;
-        Result rc = fsOpenFileSystemWithPatch(&fs, id, fsType);
-        if (R_SUCCEEDED(rc))
-            *out = IFileSystem(std::move(fs));
-        return rc;
+        R_TRY(fsOpenFileSystemWithPatch(&fs, id, fsType));
+        *out = IFileSystem(std::move(fs));
+        return ResultSuccess();
     }
 
     Result OpenFileSystemWithId(IFileSystem* out, u64 id, FsFileSystemType fsType, const char* contentPath) {
         FsFileSystem fs;
-        Result rc = fsOpenFileSystemWithId(&fs, id, fsType, contentPath);
-        if (R_SUCCEEDED(rc))
-            *out = IFileSystem(std::move(fs));
-        return rc;
+        R_TRY(fsOpenFileSystemWithId(&fs, id, fsType, contentPath));
+        *out = IFileSystem(std::move(fs));
+        return ResultSuccess();
 
     }
 
     Result OpenBisFileSystem(IFileSystem* out, FsBisPartitionId partitionId, const char* string) {
         FsFileSystem fs;
-        Result rc = fsOpenBisFileSystem(&fs, partitionId, string);
-        if (R_SUCCEEDED(rc))
-            *out = IFileSystem(std::move(fs));
-        return rc;
+        R_TRY(fsOpenBisFileSystem(&fs, partitionId, string));
+        *out = IFileSystem(std::move(fs));
+        return ResultSuccess();
     }
 
     Result OpenSdCardFileSystem(IFileSystem *out) {
         FsFileSystem fs;
-        Result rc = fsOpenSdCardFileSystem(&fs);
-        if (R_SUCCEEDED(rc))
-            *out = IFileSystem(std::move(fs));
-        return rc;
+        R_TRY(fsOpenSdCardFileSystem(&fs));
+        *out = IFileSystem(std::move(fs));
+        return ResultSuccess();
     }
 
     Result OpenImageDirectoryFileSystem(IFileSystem *out, FsImageDirectoryId id) {
         FsFileSystem fs;
-        Result rc = fsOpenImageDirectoryFileSystem(&fs, id);
-        if (R_SUCCEEDED(rc))
-            *out = IFileSystem(std::move(fs));
-        return rc;
+        R_TRY(fsOpenImageDirectoryFileSystem(&fs, id));
+        *out = IFileSystem(std::move(fs));
+        return ResultSuccess();
     }
 
     Result OpenContentStorageFileSystem(IFileSystem* out, FsContentStorageId content_storage_id) {
         FsFileSystem fs;
-        Result rc = fsOpenContentStorageFileSystem(&fs, content_storage_id);
-        if (R_SUCCEEDED(rc))
-            *out = IFileSystem(std::move(fs));
-        return rc;
+        R_TRY(fsOpenContentStorageFileSystem(&fs, content_storage_id));
+        *out = IFileSystem(std::move(fs));
+        return ResultSuccess();
     }
 
     Result OpenCustomStorageFileSystem(IFileSystem* out, FsCustomStorageId custom_storage_id) {
         FsFileSystem fs;
-        Result rc = fsOpenCustomStorageFileSystem(&fs, custom_storage_id);
-        if (R_SUCCEEDED(rc))
-            *out = IFileSystem(std::move(fs));
-        return rc;
+        R_TRY(fsOpenCustomStorageFileSystem(&fs, custom_storage_id));
+        *out = IFileSystem(std::move(fs));
+        return ResultSuccess();
     }
 
 }
