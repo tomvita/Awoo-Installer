@@ -94,9 +94,8 @@ Result Test(std::shared_ptr<IFileSystem> &fs) {
 }
 
 int main(int argc, char *argv[]) {
-    FsFileSystem sdmc;
-    R_TRY(fsOpenSdCardFileSystem(&sdmc));
-    auto fs = std::make_shared<IFileSystem>(std::move(sdmc));
+    auto fs = std::make_shared<IFileSystem>();
+    fs->OpenSdCardFileSystem();
 
     InitializeLog(fs);
 

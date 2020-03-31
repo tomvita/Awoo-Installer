@@ -21,7 +21,7 @@ namespace cfg {
 
             /* Open boot storage. */
             IStorage boot0;
-            R_RETURN(fs::OpenBisStorage(&boot0, FsBisPartitionId_BootPartition1Root));
+            R_RETURN(boot0.OpenBisStorage(FsBisPartitionId_BootPartition1Root));
 
             /* Read version from BCT. */
             u32 temp_keyGen;

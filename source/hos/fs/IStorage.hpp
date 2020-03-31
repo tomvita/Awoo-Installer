@@ -33,10 +33,7 @@ class IStorage {
 
     /* [4.0.0+] */
     Result OperateRange(FsOperationId operation_id, s64 offset, s64 len, FsRangeInfo *out);
+
+  public:
+    Result OpenBisStorage(FsBisPartitionId partitionId);
 };
-
-namespace fs {
-
-    Result OpenBisStorage(IStorage *out, FsBisPartitionId partitionId);
-
-}

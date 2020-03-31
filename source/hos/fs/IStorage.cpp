@@ -67,13 +67,9 @@ Result IStorage::OperateRange(FsOperationId operation_id, s64 offset, s64 length
     return fsStorageOperateRange(&this->m_storage, operation_id, offset, length, out);
 }
 
-namespace fs {
-
-    Result OpenBisStorage(IStorage *out, FsBisPartitionId partitionId) {
-        FsStorage storage;
-        R_TRY(fsOpenBisStorage(&storage, partitionId));
-        *out = IStorage(std::move(storage));
-        return ResultSuccess();
-    }
-
+Result IStorage::OpenBisStorage(FsBisPartitionId partitionId) {
+    FsStorage storage;
+    R_TRY(fsOpenBisStorage(&storage, partitionId));
+    *this = IStorage(std::move(storage));
+    return ResultSuccess();
 }
