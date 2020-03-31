@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:HookedBehemoth/cpp-HOS-lib.git
 	branch = master
-	commit = e5f27d29ef12dd8353d9b6b9391a9391a346d2d9
-	parent = f4cdf8bd9a1651025c2c5ba0a1d80e7d49173528
+	commit = cd8633623d61371ed1846acc0112ce6976d564a4
+	parent = acc3ea72a13d5c274090375cc7ef5d12857e19ae
 	method = merge
 	cmdver = 0.4.1
