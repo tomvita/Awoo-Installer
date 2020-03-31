@@ -120,57 +120,57 @@ Result IFileSystem::GetFileTimeStampRaw(FsTimeStampRaw *out, const char *path) {
 }
 
 Result IFileSystem::OpenFileSystem(FsFileSystemType fsType, const char *contentPath) {
-    FsFileSystem fs;
-    R_TRY(fsOpenFileSystem(&fs, fsType, contentPath));
-    *this = IFileSystem(std::move(fs));
+    this->Close();
+    R_TRY(fsOpenFileSystem(&this->m_fs, fsType, contentPath));
+    this->open = true;
     return ResultSuccess();
 }
 
 Result IFileSystem::OpenFileSystemWithPatch(u64 id, FsFileSystemType fsType) {
-    FsFileSystem fs;
-    R_TRY(fsOpenFileSystemWithPatch(&fs, id, fsType));
-    *this = IFileSystem(std::move(fs));
+    this->Close();
+    R_TRY(fsOpenFileSystemWithPatch(&this->m_fs, id, fsType));
+    this->open = true;
     return ResultSuccess();
 }
 
 Result IFileSystem::OpenFileSystemWithId(u64 id, FsFileSystemType fsType, const char *contentPath) {
-    FsFileSystem fs;
-    R_TRY(fsOpenFileSystemWithId(&fs, id, fsType, contentPath));
-    *this = IFileSystem(std::move(fs));
+    this->Close();
+    R_TRY(fsOpenFileSystemWithId(&this->m_fs, id, fsType, contentPath));
+    this->open = true;
     return ResultSuccess();
 }
 
 Result IFileSystem::OpenBisFileSystem(FsBisPartitionId partitionId, const char *string) {
-    FsFileSystem fs;
-    R_TRY(fsOpenBisFileSystem(&fs, partitionId, string));
-    *this = IFileSystem(std::move(fs));
+    this->Close();
+    R_TRY(fsOpenBisFileSystem(&this->m_fs, partitionId, string));
+    this->open = true;
     return ResultSuccess();
 }
 
 Result IFileSystem::OpenSdCardFileSystem() {
-    FsFileSystem fs;
-    R_TRY(fsOpenSdCardFileSystem(&fs));
-    *this = IFileSystem(std::move(fs));
+    this->Close();
+    R_TRY(fsOpenSdCardFileSystem(&this->m_fs));
+    this->open = true;
     return ResultSuccess();
 }
 
 Result IFileSystem::OpenImageDirectoryFileSystem(FsImageDirectoryId id) {
-    FsFileSystem fs;
-    R_TRY(fsOpenImageDirectoryFileSystem(&fs, id));
-    *this = IFileSystem(std::move(fs));
+    this->Close();
+    R_TRY(fsOpenImageDirectoryFileSystem(&this->m_fs, id));
+    this->open = true;
     return ResultSuccess();
 }
 
 Result IFileSystem::OpenContentStorageFileSystem(FsContentStorageId content_storage_id) {
-    FsFileSystem fs;
-    R_TRY(fsOpenContentStorageFileSystem(&fs, content_storage_id));
-    *this = IFileSystem(std::move(fs));
+    this->Close();
+    R_TRY(fsOpenContentStorageFileSystem(&this->m_fs, content_storage_id));
+    this->open = true;
     return ResultSuccess();
 }
 
 Result IFileSystem::OpenCustomStorageFileSystem(FsCustomStorageId custom_storage_id) {
-    FsFileSystem fs;
-    R_TRY(fsOpenCustomStorageFileSystem(&fs, custom_storage_id));
-    *this = IFileSystem(std::move(fs));
+    this->Close();
+    R_TRY(fsOpenCustomStorageFileSystem(&this->m_fs, custom_storage_id));
+    this->open = true;
     return ResultSuccess();
 }
